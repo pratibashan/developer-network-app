@@ -8,7 +8,7 @@ const auth = require('../../middleware/auth')
 const User = require('../../models/User');
 
 
-
+// Login route --- returns json web token if user is already exists
 //@route   GET api/auth
 //@desc    Test Route
 //@access  Public
