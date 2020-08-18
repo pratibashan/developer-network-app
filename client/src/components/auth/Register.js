@@ -103,8 +103,8 @@ export default connect(mapStateToProps, { setAlert, register })(Register);
 
 // if we want to connect to backend thro react/axios without redux ---
 
-{
-  /* const Register = () => {
+// {
+/* const Register = () => {
 
 const [formData, setFormData] = useState({
   name: '',
@@ -146,4 +146,4 @@ const onSubmit = async e => {
     }
   } 
 }*/
-}
+// }
