@@ -118,6 +118,7 @@ router.get('/', async (req, res) => {
 //@desc    Get profile by user_id
 //@access  Public
 router.get('/user/:user_id', async (req, res) => {
+  console.log(req.params.user_id);
   try {
     const profile = await Profile.findOne({
       user: req.params.user_id,

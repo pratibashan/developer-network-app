@@ -4,48 +4,66 @@ import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 import { createProfile, getCurrentProfile } from '../../redux/actions/profile';
 
+const initialState = {
+  company: '',
+  website: '',
+  location: '',
+  status: '',
+  skills: '',
+  githubusername: '',
+  bio: '',
+  twitter: '',
+  facebook: '',
+  linkedin: '',
+  youtube: '',
+  instagram: '',
+};
+
 const EditProfile = ({
   profile: { profile, loading },
   createProfile,
   getCurrentProfile,
   history,
 }) => {
-  const [formData, setFormData] = useState({
-    company: '',
-    website: '',
-    location: '',
-    status: '',
-    skills: '',
-    githubusername: '',
-    bio: '',
-    twitter: '',
-    facebook: '',
-    linkedin: '',
-    youtube: '',
-    instagram: '',
-  });
+  const [formData, setFormData] = useState(initialState);
   const [displaySocialInputs, toggleSocialInputs] = useState(false);
+  // useEffect(() => {
+  //   getCurrentProfile();
+  //   setFormData({
+  //     company: loading || !profile.company ? '' : profile.company,
+  //     website: loading || !profile.website ? '' : profile.website,
+  //     location: loading || !profile.location ? '' : profile.location,
+  //     status: loading || !profile.status ? '' : profile.status,
+  //     skills: loading || !profile.skills ? '' : profile.skills.join(','),
+  //     githubusername:
+  //       loading || !profile.githubusername ? '' : profile.githubusername,
+  //     bio: loading || !profile.bio ? '' : profile.bio,
+  //     twitter: loading || !profile.social.twitter ? '' : profile.social.twitter,
+  //     facebook:
+  //       loading || !profile.social.facebook ? '' : profile.social.facebook,
+  //     linkedin:
+  //       loading || !profile.social.linkedin ? '' : profile.social.linkedin,
+  //     youtube: loading || !profile.social.youtube ? '' : profile.social.youtube,
+  //     instagram:
+  //       loading || !profile.social.instagram ? '' : profile.social.instagram,
+  //   });
+  // }, [loading]);
   useEffect(() => {
-    getCurrentProfile();
-    setFormData({
-      company: loading || !profile.company ? '' : profile.company,
-      website: loading || !profile.website ? '' : profile.website,
-      location: loading || !profile.location ? '' : profile.location,
-      status: loading || !profile.status ? '' : profile.status,
-      skills: loading || !profile.skills ? '' : profile.skills.join(','),
-      githubusername:
-        loading || !profile.githubusername ? '' : profile.githubusername,
-      bio: loading || !profile.bio ? '' : profile.bio,
-      twitter: loading || !profile.social.twitter ? '' : profile.social.twitter,
-      facebook:
-        loading || !profile.social.facebook ? '' : profile.social.facebook,
-      linkedin:
-        loading || !profile.social.linkedin ? '' : profile.social.linkedin,
-      youtube: loading || !profile.social.youtube ? '' : profile.social.youtube,
-      instagram:
-        loading || !profile.social.instagram ? '' : profile.social.instagram,
-    });
-  }, [loading]);
+    if (!profile) getCurrentProfile();
+    if (!loading && profile) {
+      const profileData = { ...initialState };
+      for (const key in profile) {
+        if (key in profileData) profileData[key] = profile[key];
+      }
+      for (const key in profile.social) {
+        if (key in profileData) profileData[key] = profile.social[key];
+      }
+      if (Array.isArray(profileData.skills))
+        profileData.skills = profileData.skills.join(', ');
+      setFormData(profileData);
+    }
+  }, [loading, getCurrentProfile, profile]);
+
   const {
     company,
     website,
@@ -183,6 +201,7 @@ const EditProfile = ({
                 placeholder='Twitter URL'
                 name='twitter'
                 value={twitter}
+                // defaultValue={'' || twitter}
                 onChange={(e) => onChange(e)}
               />
             </div>
